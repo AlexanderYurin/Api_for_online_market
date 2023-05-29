@@ -1,0 +1,9 @@
+asgiref==3.7.2
+diploma-frontend @ file:///Users/ex/python_django_diploma/diploma-frontend/dist/diploma-frontend-0.2.tar.gz#sha256=e5292dedcb8a6e78bbc1d51a338c0503262341c02410024de7309579b909781f
+Django==4.2.1
+djangorestframework==3.14.0
+Pillow==9.5.0
+psycopg2==2.9.6
+pytz==2023.3
+sqlparse==0.4.4
+typing_extensions==4.6.2
