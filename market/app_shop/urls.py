@@ -10,16 +10,16 @@ urlpatterns = [
 	path("categories", CatalogViewSet.as_view({"get": "get_categories"})),
 	path("products/popular", CatalogViewSet.as_view({"get": "get_product_popular"})),
 	path("products/limited", CatalogViewSet.as_view({"get": "get_product_limit"})),
-	# path("catalog", CatalogList.as_view()),
-	# path("catalog/<int:pk>", CatalogList.as_view())
+	path("banners", CatalogViewSet.as_view({"get": "get_banners"})),
+	path("catalog", CatalogViewSet.as_view({"get": "get_catalog"})),
+	path("catalog/<int:pk>", CatalogViewSet.as_view({"get": "get_catalog_id"})),
 	path("tags", TagList.as_view({"get": "list"})),
 	path("", include(router_product.urls)),
+	path("product<int:pk>/review", ProductViewSet.as_view({"post": "post_product_id_review"})),
+	path("products/<int:pk>", ProductViewSet.as_view({"get": "get_product_detail"})),
 
-	# /products/popular
-	# /products/limited
+
 	# /sales
-	# /banners:
-
 	# /product/{id}/review:
 	# /basket:
 	# /orders:

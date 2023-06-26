@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from app_shop.models import Category, Subcategories, Image, ImageProduct, Specification, Tag, Product, Review
+from app_shop.models import Category, Subcategories, Image, ImagesProduct, Specification, Tag, Product, Review
 
 
 # Register your models here.
@@ -52,7 +52,7 @@ class ImageProductAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(ImageProduct, ImageProductAdmin)
+admin.site.register(ImagesProduct, ImageProductAdmin)
 
 
 class TagAdmin(admin.ModelAdmin):
