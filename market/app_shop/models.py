@@ -79,6 +79,8 @@ class Product(models.Model):
 	freeDelivery = models.BooleanField(default=False, verbose_name="Free Delivery")
 	sale = models.FloatField(default=0, verbose_name="Sale")
 	available = models.BooleanField(default=True, verbose_name="Available")
+	images = models.ManyToManyField("ImagesProduct", default=None)
+	tags = models.ManyToManyField("Tag", default=None)
 
 	class Meta:
 		verbose_name_plural = "Products"
@@ -87,6 +89,10 @@ class Product(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class ImagesProduct(models.Model):
+	image_url = models.ImageField()
 
 
 class Review(models.Model):
@@ -115,13 +121,7 @@ class Specification(models.Model):
 	value = models.CharField(max_length=256, verbose_name="Value")
 
 
-class ImagesProduct(models.Model):
-	product = models.ForeignKey("Product", on_delete=models.CASCADE, related_name="images")
-	url = models.ImageField(upload_to="images_product", verbose_name="ImagesProduct", blank=None)  # сомневаюсь
-
-
 class Tag(models.Model):
-	product = models.ManyToManyField("Product", verbose_name="Tag", related_name="tags")
 	name = models.CharField(max_length=255, verbose_name="Name", unique=True)
 	id = models.CharField(max_length=50, primary_key=True)
 

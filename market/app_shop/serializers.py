@@ -38,12 +38,6 @@ class CategorySerializer(serializers.ModelSerializer):
 		)
 
 
-class ImagesProductSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = ImagesProduct
-		fields = ['url']
-
-
 class TagSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Tag
@@ -62,9 +56,15 @@ class SpecificationSerializer(serializers.ModelSerializer):
 		fields = ['name', 'value']
 
 
+class ImagesProductSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = ImagesProduct
+		fields = ('image_url',)
+
+
 class ProductSerializer(serializers.ModelSerializer):
-	images = serializers.StringRelatedField(many=True)
-	tags = serializers.StringRelatedField(many=True)
+	images = serializers.SerializerMethodField()
+	tags = serializers.SerializerMethodField()
 	reviews = ReviewSerializer(many=True)
 	specifications = SpecificationSerializer(many=True)
 	href = serializers.SerializerMethodField()
@@ -75,13 +75,16 @@ class ProductSerializer(serializers.ModelSerializer):
 		fields = ['id', 'category', 'price', 'count', 'date', 'title', 'description', 'fullDescription',
 				  'href', 'freeDelivery', 'images', 'tags', 'reviews', 'specifications', 'rating']
 
+	def get_tags(self, obj):
+		return [tag.name for tag in obj.tags.all()]
+
+	# def get_images(self, obj):
+	# 	return ImagesProductSerializer(obj.images.all(), many=True).data
+
 	def get_href(self, obj):
 		return "/product/{id}".format(
 			id=obj.pk
 		)
-
-	# def get_tags(self, obj):
-	# 	return [tag.name for tag in obj.tags.all()]
 
 	def get_rating(self, obj):
 		average_rating = obj.reviews.aggregate(Avg("rate")).get("rate__avg")
