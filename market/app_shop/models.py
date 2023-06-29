@@ -92,7 +92,7 @@ class Product(models.Model):
 
 
 class ImagesProduct(models.Model):
-	image_url = models.ImageField()
+	image_url = models.ImageField(upload_to="product")
 
 
 class Review(models.Model):

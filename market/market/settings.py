@@ -138,7 +138,7 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+MEDIA_URL = "/"
 
 
 # Default primary key field type
@@ -146,3 +146,4 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_CHARSET = 'utf-8'
+AUTH_USER_MODEL = "app_user.Profile"
