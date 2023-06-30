@@ -23,6 +23,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("frontend.urls")),
     path("api/", include("app_shop.urls")),
-    path("api/", include("app_user.urls"))
+    path("api/", include("app_user.urls")),
+    path("api/", include("app_basket.urls"))
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
