@@ -1,34 +1,86 @@
-from rest_framework import generics, viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework import mixins
 from app_user.models import Profile
-from app_user.serializers import UserSerializers
+from app_user.serializers import UserSerializers, UserPasswordSerializers, UserAvatarSerializers
+from rest_framework.response import Response
 
 
-class UserApi(mixins.ListModelMixin, viewsets.GenericViewSet):
+class UserApi(viewsets.ViewSet):
+	"""
+	ViewSet для работы с профилем пользователя.
+	"""
+
 	queryset = Profile.objects.all()
-	serializer_class = UserSerializers
 	pagination_class = None
 
+	@action(detail=True, methods=["get", "post"])
+	def get_profile(self, request):
+		"""
+		Получает профиль пользователя.
 
-	@action(detail=True, methods=["post"])
-	def post_profile(self, request):
-		product = self.get_object()
-		if request.method == "POST":
-			print(1)
-			# serializer = ReviewSerializer(data=request.data)
-			# if serializer.is_valid():
-			# 	review = Review(product=product, **serializer.validated_data)
-			# 	review.save()
-			# 	serializer = ReviewSerializer(product.reviews, many=True)
-			# 	return Response(serializer.data)
-			# else:
-			# 	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		GET:
+		Возвращает сериализованные данные профиля пользователя.
 
-	@action(detail=True, methods=["post"], url_path="password")
-	def post_profile_password(self, request):
-		pass
+		POST:
+		Обновляет данные пользователя и возвращает сериализованные данные профиля,
+		если данные валидны. В противном случае возвращает ошибки сериализации.
+		"""
+		profile = self.queryset.get(pk=request.user.pk)
+		if request.method == "GET":
+			serializer = UserSerializers(profile)
+			return Response(serializer.data)
+		elif request.method == "POST":
+			serializer = UserPasswordSerializers(profile, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			else:
+				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-	@action(detail=True, methods=["post"], url_path="avatar")
-	def post_profile_avatar(self, request):
-		pass
+	@action(detail=True, methods=["get", "post"])
+	def profile_password(self, request):
+		"""
+		Получает или обновляет пароль пользователя.
+
+		GET:
+		Возвращает сериализованные данные пароля пользователя.
+
+		POST:
+		Обновляет пароль пользователя и возвращает сериализованные данные пароля,
+		если данные валидны. В противном случае возвращает ошибки сериализации.
+		"""
+		instance = self.queryset.get(pk=request.user.pk)
+		if request.method == "GET":
+			serializer = UserPasswordSerializers(instance)
+			return Response(serializer.data)
+		elif request.method == "POST":
+			serializer = UserPasswordSerializers(instance, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			else:
+				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	@action(detail=True, methods=["get", "post"])
+	def profile_avatar(self, request):
+		"""
+		Получает или обновляет аватар пользователя.
+
+		GET:
+		Возвращает сериализованные данные аватара пользователя.
+
+		POST:
+		Обновляет аватар пользователя и возвращает сериализованные данные аватара,
+		если данные валидны. В противном случае возвращает ошибки сериализации.
+		"""
+		instance = self.queryset.get(pk=request.user.pk)
+		if request.method == "GET":
+			serializer = UserAvatarSerializers(instance)
+			return Response(serializer.data)
+		elif request.method == "POST":
+			serializer = UserAvatarSerializers(instance, data=request.data)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			else:
+				return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

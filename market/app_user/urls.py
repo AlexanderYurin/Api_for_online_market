@@ -1,10 +1,8 @@
-from django.urls import path, include
+from django.urls import path
 from app_user.views import UserApi
-from rest_framework.routers import DefaultRouter
-
-router_profile = DefaultRouter()
-router_profile.register(r"profile", UserApi)
 
 urlpatterns = [
-	path("", include(router_profile.urls)),
+	path("profile", UserApi.as_view({"get": "get_profile", "post": "get_profile"})),
+	path("profile/password", UserApi.as_view({"post": "profile_password", "get": "profile_password"})),
+	path("profile/avatar", UserApi.as_view({"post": "profile_avatar", "get": "profile_avatar"}))
 ]
